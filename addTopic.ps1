@@ -20,7 +20,13 @@ $params = @{
     'Method' = 'GET'
     'ContentType' = 'application/json'
 }
-$topics = Invoke-RestMethod @params
+try {
+    $topics = Invoke-RestMethod @params
+}
+catch {
+    Write-Host "Error getting existing topics: $_"
+    exit
+}
 
 # Add new topic
 $topics.names += $topic
@@ -34,6 +40,10 @@ $params = @{
     'ContentType' = 'application/json'
     'Body' = $body
 }
-$result = Invoke-RestMethod @params
-
-Write-Host "Topics updated successfully!"
+try {
+    $result = Invoke-RestMethod @params
+    Write-Host "Topics updated successfully!"
+}
+catch {
+    Write-Host "Error updating topics: $_"
+}
